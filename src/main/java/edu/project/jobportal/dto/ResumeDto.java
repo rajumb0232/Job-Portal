@@ -8,8 +8,8 @@ import lombok.Setter;
 public class ResumeDto {
 	private long resumeId;
 	private String summary;
-	private String Qualification;
-	private String University;
+	private String qualification;
+	private String university;
 	private String socialProfile1;
 	private String socialProfile2;
 	private String socialProfile3;

@@ -25,7 +25,7 @@ public class Employer {
 	private String employerEmail;
 	private String employerPassword;
 
-	@OneToMany
+	@OneToMany(mappedBy = "employer")
 	@JsonIgnore
 	private List<Job> jobs;
 }
