@@ -11,6 +11,8 @@ import edu.project.jobportal.dao.SkillDao;
 import edu.project.jobportal.entity.Applicant;
 import edu.project.jobportal.entity.Resume;
 import edu.project.jobportal.entity.Skill;
+import edu.project.jobportal.exception.ApplicantNotfoundByIdException;
+import edu.project.jobportal.exception.ResumeNotFoundByIdException;
 import edu.project.jobportal.util.responseStructure;
 
 @Service
@@ -29,9 +31,9 @@ public class SkillService {
 			Resume resume = applicant.getResume();
 			if(resume!=null) {
 			/*
-			 * - iterate over the String arrays skills that is recieved
-			 * check if the skill is present with matching name,
-			 * if present add the existing skill to the resume
+			 * - iterate over the String arrays skills that is received
+			 * check if the skill is present with matching name with the user,
+			 * if present do not add to the user again, 
 			 * or else create an new skill
 			 * */
 				
@@ -57,12 +59,10 @@ public class SkillService {
 				return new ResponseEntity<responseStructure<Resume>> (responseStructure, HttpStatus.CREATED);
 				
 			}else {
-				//throw new ResumeNotFoundByIdException("Failed to add skills!!");
-				return null;
+				throw new ResumeNotFoundByIdException("Failed to add skills!!");
 			}
 		}else {
-			//throw new ApplicantNotfoundByIdException("Failed to add Resume!!");
-			return null;
+			throw new ApplicantNotfoundByIdException("Failed to add Resume!!");
 		}
 	}
 }
