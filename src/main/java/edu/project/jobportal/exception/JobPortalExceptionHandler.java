@@ -24,7 +24,7 @@ public class JobPortalExceptionHandler {
 		responseStructure<String> responseStructure = new responseStructure<>();
 		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
 		responseStructure.setMessage(ex.getMessage());
-		responseStructure.setData("Failed to find the Employer with requested Id!!");
+		responseStructure.setData("Failed to find the Resume with requested Id!!");
 		return new ResponseEntity<responseStructure<String>> (responseStructure, HttpStatus.NOT_FOUND);
 	}
 	
@@ -33,7 +33,7 @@ public class JobPortalExceptionHandler {
 		responseStructure<String> responseStructure = new responseStructure<>();
 		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
 		responseStructure.setMessage(ex.getMessage());
-		responseStructure.setData("Failed to find the Employer with requested Id!!");
+		responseStructure.setData("Failed to find the Applicant with requested Id!!");
 		return new ResponseEntity<responseStructure<String>> (responseStructure, HttpStatus.NOT_FOUND);
 	}
 }

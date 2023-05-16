@@ -36,7 +36,7 @@ public class Resume {
 	@JsonIgnore
 	private Applicant applicant;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	private List<Skill> skills;
 
 	@OneToMany(cascade = CascadeType.ALL)
