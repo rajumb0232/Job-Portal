@@ -17,7 +17,6 @@ public class ResumeDao {
 	}
 
 	public void deleteResume(Resume resume) {
-		System.err.println("in resumedao");
 		resumeRepo.delete(resume);
 	}
 }
