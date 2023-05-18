@@ -49,8 +49,37 @@ public class JobService {
 			throw new EmployerNotFoundByIdException("Failed to add Job!!");
 		}
 		
-		
-		
-		
 	}
+	
+	
+	/*
+	 * 1) write a method to fetch the Job bu Id,
+	 * ----- fetch the job from database based on Id,
+	  		 check if the returned object is null or not
+	  		 if not null - 
+	  		 return responseEntity,
+	  		 else - 
+	  		 throw new exception;
+	  		 
+	  		 
+	  *2) write a method to update Job, 
+	     fetch the existing Job by id,
+	      if present set the existing jobId to the updated Job(the object received in the
+	      method parameter)
+	      set the exiting jobApplication list to the updated Job entity,
+	      set the existing employer to the updated job object.
+	      then,
+	      update the job object and return response entity.
+	      
+	  
+	  *3) write a method to delete JOb,
+	  * before deleting the job object,
+	  * set job as null to all the job applications and
+	  * set job as null to employer 
+	  * then 
+	  * delete the job object.*/
 }
+
+
+
+

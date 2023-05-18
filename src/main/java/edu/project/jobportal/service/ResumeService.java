@@ -50,4 +50,8 @@ public class ResumeService {
 		
 		
 	}
+	
+	
+	/* create methods to update, fetching the resume by applicantId,
+	 * */
 }

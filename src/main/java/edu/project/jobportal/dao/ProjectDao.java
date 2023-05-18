@@ -15,4 +15,8 @@ public class ProjectDao {
 	public Project saveProject(Project project) {
 		return projectRepo.save(project);
 	}
+
+	public void deleteProject(Project project) {
+		projectRepo.delete(project);
+	}
 }

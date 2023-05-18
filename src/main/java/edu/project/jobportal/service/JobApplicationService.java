@@ -65,4 +65,13 @@ public class JobApplicationService {
 			throw new ApplicantNotfoundByIdException("Failed to create Job Application!!");
 		}
 	}
+	
+	
+	/*
+	 * write a method to fetch all the jobApplications based on the applicantId
+	 * 
+	 * write a method to fetch all the jobApplications based on the job entity
+	 * (first fetch the job entity bu id, the pass the object to the query in the 
+	 * repository, select a from JobApplication a where a.job=?1)
+	 * */
 }

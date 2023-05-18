@@ -5,13 +5,19 @@ import org.springframework.stereotype.Repository;
 
 import edu.project.jobportal.entity.Resume;
 import edu.project.jobportal.repository.ResumeRepo;
+
 @Repository
 public class ResumeDao {
-	
+
 	@Autowired
 	private ResumeRepo resumeRepo;
-	
+
 	public Resume saveResume(Resume resume) {
 		return resumeRepo.save(resume);
+	}
+
+	public void deleteResume(Resume resume) {
+		System.err.println("in resumedao");
+		resumeRepo.delete(resume);
 	}
 }
