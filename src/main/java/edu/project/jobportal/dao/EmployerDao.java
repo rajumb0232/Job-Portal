@@ -26,4 +26,8 @@ public class EmployerDao {
 			return optional.get();
 		}
 	}
+
+	public void deleteEmployer(Employer employer) {
+		employerRepo.delete(employer);
+	}
 }

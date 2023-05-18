@@ -65,10 +65,10 @@ public class ApplicatService {
 			applicantDao.addApplicant(applicant);
 			ApplicantDto applicantDto = this.modelMapper.map(applicant, ApplicantDto.class);
 			responseStructure<ApplicantDto> responseStructure = new responseStructure<>();
-			responseStructure.setStatusCode(HttpStatus.FOUND.value());
+			responseStructure.setStatusCode(HttpStatus.OK.value());
 			responseStructure.setMessage("Applicant updated successfully.");
 			responseStructure.setData(applicantDto);
-			return new ResponseEntity<responseStructure<ApplicantDto>>(responseStructure, HttpStatus.FOUND);
+			return new ResponseEntity<responseStructure<ApplicantDto>>(responseStructure, HttpStatus.OK);
 		}
 		throw new ApplicantNotfoundByIdException("Failed to update Applicant!!");
 
@@ -78,7 +78,8 @@ public class ApplicatService {
 		Applicant applicant = applicantDao.getApplicant(applicantId);
 		
 		if (applicant != null) {
-			
+			/*Before deleting the applicant the applicant is to null in all the
+			  jobApplications later the applicant is delete the applicant */
 			for (JobApplication jobApplication : applicant.getJobApplications()) {
 				jobApplication.setApplicant(null);
 				// createJobApplication() method used to update
@@ -86,7 +87,11 @@ public class ApplicatService {
 			}
 			applicantDao.deleteApplicant(applicant);
 			Resume resume = applicant.getResume();
+			/*After the applicant is deleted the the resume linked to the applicant
+			 * should be deleted*/
 			if(resume!=null) {
+				/*Before deleting the resume the skills should be set to null
+				 * in the resume.*/
 				resume.setSkills(null);
 				// saveResume() method used to update
 				resumeDao.saveResume(resume);
@@ -99,10 +104,10 @@ public class ApplicatService {
 
 			ApplicantDto applicantDto = this.modelMapper.map(applicant, ApplicantDto.class);
 			responseStructure<ApplicantDto> responseStructure = new responseStructure<>();
-			responseStructure.setStatusCode(HttpStatus.FOUND.value());
+			responseStructure.setStatusCode(HttpStatus.OK.value());
 			responseStructure.setMessage("Applicant deleted successfully.");
 			responseStructure.setData(applicantDto);
-			return new ResponseEntity<responseStructure<ApplicantDto>>(responseStructure, HttpStatus.FOUND);
+			return new ResponseEntity<responseStructure<ApplicantDto>>(responseStructure, HttpStatus.OK);
 		}
 		throw new ApplicantNotfoundByIdException("Failed to delete Applicant!!");
 
