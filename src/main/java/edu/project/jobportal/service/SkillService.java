@@ -42,14 +42,14 @@ public class SkillService {
 					Skill existingskill = skillDao.getSkillByName(skill);
 					List<Skill> exSkills = resume.getSkills();
 					if (existingskill != null) {
-						if (!resume.getSkills().contains(existingskill)) {
+						if (!exSkills.contains(existingskill)) {
 							exSkills.add(existingskill);
 						}
-						} else {
-							Skill newSkill = new Skill();
-							newSkill.setSkillName(skill);
-							skillDao.saveSkill(newSkill);
-							exSkills.add(newSkill);
+					} else {
+						Skill newSkill = new Skill();
+						newSkill.setSkillName(skill);
+						skillDao.saveSkill(newSkill);
+						exSkills.add(newSkill);
 					}
 
 				}
@@ -57,7 +57,7 @@ public class SkillService {
 				resume = resumeDao.saveResume(resume);
 				responseStructure<Resume> responseStructure = new responseStructure<>();
 				responseStructure.setStatusCode(HttpStatus.CREATED.value());
-				responseStructure.setMessage("Resume added successfully!!");
+				responseStructure.setMessage("Skills added successfully!!");
 				responseStructure.setData(resume);
 				return new ResponseEntity<responseStructure<Resume>>(responseStructure, HttpStatus.CREATED);
 
@@ -65,7 +65,7 @@ public class SkillService {
 				throw new ResumeNotFoundByIdException("Failed to add skills!!");
 			}
 		} else {
-			throw new ApplicantNotfoundByIdException("Failed to add Resume!!");
+			throw new ApplicantNotfoundByIdException("Failed to add skills!!");
 		}
 	}
 }

@@ -2,6 +2,7 @@ package edu.project.jobportal.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,13 @@ public class JobController {
 	private JobService jobService;
 	
 	@PostMapping
-	public ResponseEntity<responseStructure<Job>> addJob(@RequestBody JobDto jobDto, @RequestParam long employerId){
-		return jobService.addJob(jobDto, employerId);
+	public ResponseEntity<responseStructure<Job>> addJob(
+			@RequestBody JobDto jobDto, @RequestParam long employerId, @RequestParam String[] skills){
+		return jobService.addJob(jobDto, employerId, skills);
+	}
+
+	@GetMapping
+	public ResponseEntity<responseStructure<Job>> getJobById(@RequestParam long jobId){
+		return jobService.getJobById(jobId);
 	}
 }
