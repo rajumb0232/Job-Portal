@@ -37,10 +37,10 @@ public class SkillService {
 				 * is present with matching name with the user, if present do not add to the
 				 * user again, or else create an new skill
 				 */
-
+				List<Skill> exSkills = resume.getSkills();
 				for (String skill : skills) {
 					Skill existingskill = skillDao.getSkillByName(skill);
-					List<Skill> exSkills = resume.getSkills();
+					
 					if (existingskill != null) {
 						if (!exSkills.contains(existingskill)) {
 							exSkills.add(existingskill);
@@ -51,9 +51,11 @@ public class SkillService {
 						skillDao.saveSkill(newSkill);
 						exSkills.add(newSkill);
 					}
-
 				}
-
+				/*
+				 * setting the exSkills list to the resume*/
+				resume.setSkills(exSkills);
+				
 				resume = resumeDao.saveResume(resume);
 				responseStructure<Resume> responseStructure = new responseStructure<>();
 				responseStructure.setStatusCode(HttpStatus.CREATED.value());

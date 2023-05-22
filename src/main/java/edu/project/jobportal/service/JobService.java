@@ -44,10 +44,10 @@ public class JobService {
 			 * checking if the skill is already present in the database, if present add same
 			 * skill to the job, or else create the new skill
 			 */
-
+			List<Skill> exSkills = job.getSkills();
 			for (String skill : skills) {
 				Skill existingSkill = skillDao.getSkillByName(skill);
-				List<Skill> exSkills = job.getSkills();
+			
 				if (existingSkill != null) {
 					if (!exSkills.contains(existingSkill)) {
 						exSkills.add(existingSkill);
@@ -58,8 +58,10 @@ public class JobService {
 					skillDao.saveSkill(newSkill);
 					exSkills.add(newSkill);
 				}
-
 			}
+			/*
+			 * setting the exSkills list to the job*/
+			job.setSkills(exSkills);
 
 			employer.getJobs().add(job);
 			employerDao.addEmployer(employer);
@@ -78,7 +80,11 @@ public class JobService {
 	}
 
 	public ResponseEntity<responseStructure<Job>> getJobById(long jobId) {
-		// TODO Auto-generated method stub
+		Job job = jobDao.getJob(jobId);
+		if(job!=null) {
+			// working on these...
+			return null;
+		}
 		return null;
 	}
 
