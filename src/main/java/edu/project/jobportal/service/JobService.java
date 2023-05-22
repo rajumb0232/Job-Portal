@@ -83,7 +83,11 @@ public class JobService {
 	public ResponseEntity<responseStructure<Job>> getJobById(long jobId) {
 		Job job = jobDao.getJob(jobId);
 		if(job!=null) {
-			
+			responseStructure<Job> responseStructure = new responseStructure<>();
+			responseStructure.setStatusCode(HttpStatus.FOUND.value());
+			responseStructure.setMessage("Job Found.");
+			responseStructure.setData(job);
+			return new ResponseEntity<responseStructure<Job>>(responseStructure, HttpStatus.FOUND);
 		}else
 		throw new JobNotFoundByIdException("Failed to find Job!!");
 	}
