@@ -17,6 +17,7 @@ import edu.project.jobportal.entity.Employer;
 import edu.project.jobportal.entity.Job;
 import edu.project.jobportal.entity.Skill;
 import edu.project.jobportal.exception.EmployerNotFoundByIdException;
+import edu.project.jobportal.exception.JobNotFoundByIdException;
 import edu.project.jobportal.util.responseStructure;
 
 @Service
@@ -70,7 +71,7 @@ public class JobService {
 			responseStructure<Job> responseStructure = new responseStructure<>();
 			responseStructure.setStatusCode(HttpStatus.CREATED.value());
 			responseStructure.setMessage("Job added successfully!!");
-			responseStructure.setData(jobDto);
+			responseStructure.setData(job);
 
 			return new ResponseEntity<responseStructure<Job>>(responseStructure, HttpStatus.CREATED);
 		} else {
@@ -82,14 +83,13 @@ public class JobService {
 	public ResponseEntity<responseStructure<Job>> getJobById(long jobId) {
 		Job job = jobDao.getJob(jobId);
 		if(job!=null) {
-			// working on these...
-			return null;
-		}
-		return null;
+			
+		}else
+		throw new JobNotFoundByIdException("Failed to find Job!!");
 	}
 
 	/*
-	 * 1) write a method to fetch the Job bu Id, ----- fetch the job from database
+	 * 1) write a method to fetch the Job buy Id, ----- fetch the job from database
 	 * based on Id, check if the returned object is null or not if not null - return
 	 * responseEntity, else - throw new exception;
 	 * 
