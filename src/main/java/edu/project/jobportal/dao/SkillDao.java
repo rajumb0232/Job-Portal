@@ -26,4 +26,13 @@ public class SkillDao {
 			return optional.get();
 		}
 	}
+
+	public Skill getSkillById(long skillId) {
+		Optional<Skill> optional = skillRepo.findById(skillId);
+		if(optional.isEmpty()) {
+			return null;
+		}else {
+			return optional.get();
+		}
+	}
 }
