@@ -36,4 +36,13 @@ public class JobPortalExceptionHandler {
 		responseStructure.setData("Failed to find the Applicant with requested Id!!");
 		return new ResponseEntity<responseStructure<String>> (responseStructure, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler
+	public ResponseEntity<responseStructure<String>> JobNotFoundById(JobNotFoundByIdException ex){
+		responseStructure<String> responseStructure = new responseStructure<>();
+		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		responseStructure.setMessage(ex.getMessage());
+		responseStructure.setData("Failed to find the Job with requested Id!!");
+		return new ResponseEntity<responseStructure<String>> (responseStructure, HttpStatus.NOT_FOUND);
+	}
 }
