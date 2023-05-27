@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,7 +44,13 @@ public class JobController {
 	
 	@PutMapping
 	public ResponseEntity<responseStructure<JobResponse>> updateJobById(
-			@RequestBody JobDto jobDto, @RequestParam int jobId){
+			@RequestBody JobDto jobDto, @RequestParam long jobId){
 		return jobService.updateJobById(jobDto, jobId);
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<responseStructure<JobResponse>> deleteJobById(
+			@RequestParam long jobId){
+		return jobService.deleteJobById(jobId);
 	}
 }

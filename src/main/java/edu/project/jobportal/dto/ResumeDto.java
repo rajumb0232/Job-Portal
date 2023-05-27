@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResumeDto {
-	private long resumeId;
 	private String summary;
 	private String qualification;
 	private String university;

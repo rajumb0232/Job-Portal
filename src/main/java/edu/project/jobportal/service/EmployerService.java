@@ -78,11 +78,11 @@ public class EmployerService {
 			EmployerDto employerDto = this.modelMapper.map(employer, EmployerDto.class);
 			responseStructure<EmployerDto> responseStructure = new responseStructure<>();
 			responseStructure.setStatusCode(HttpStatus.OK.value());
-			responseStructure.setMessage("Employer updated successfully.");
+			responseStructure.setMessage("Employer deleted successfully.");
 			responseStructure.setData(employerDto);
 			return new ResponseEntity<responseStructure<EmployerDto>>(responseStructure, HttpStatus.OK);
 		}
-		throw new EmployerNotFoundByIdException("Failed to update Employer!!");
+		throw new EmployerNotFoundByIdException("Failed to delete Employer!!");
 	}
 	
 	
