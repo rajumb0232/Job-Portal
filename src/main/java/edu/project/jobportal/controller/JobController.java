@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.project.jobportal.dto.JobDto;
 import edu.project.jobportal.dto.JobResponse;
-import edu.project.jobportal.entity.Job;
 import edu.project.jobportal.service.JobService;
 import edu.project.jobportal.util.responseStructure;
 
@@ -36,7 +35,7 @@ public class JobController {
 	}
 	
 	@GetMapping("/skill")
-	public ResponseEntity<responseStructure<List<Job>>> getJobsBySkill(
+	public ResponseEntity<responseStructure<List<JobResponse>>> getJobsBySkill(
 			@RequestParam long skillId){
 		return jobService.getJobsBySkill(skillId);
 	}

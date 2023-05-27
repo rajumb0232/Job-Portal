@@ -20,6 +20,7 @@ import edu.project.jobportal.entity.Job;
 import edu.project.jobportal.entity.Skill;
 import edu.project.jobportal.exception.EmployerNotFoundByIdException;
 import edu.project.jobportal.exception.JobNotFoundByIdException;
+import edu.project.jobportal.exception.JobNotFoundBySkill;
 import edu.project.jobportal.exception.SkillNotFoundByIdException;
 import edu.project.jobportal.util.responseStructure;
 
@@ -113,11 +114,29 @@ public class JobService {
 
 	
 	
-	public ResponseEntity<responseStructure<List<Job>>> getJobsBySkill(long skillId) {
+	public ResponseEntity<responseStructure<List<JobResponse>>> getJobsBySkill(long skillId) {
 		Skill skill = skillDao.getSkillById(skillId);
 		if(skill!=null) {
-			skill.getJobs();
-			return null;
+			List<Job> jobs = skill.getJobs();
+			List<JobResponse> responses = new ArrayList<>();
+			if(!jobs.isEmpty()) {
+				for(Job job : jobs) {
+					JobResponse response = this.modelMapper.map(job, JobResponse.class);
+					List<String> skills = new ArrayList<>();
+					for(Skill s : job.getSkills()) {
+						skills.add(s.getSkillName());
+					}
+					response.setSkills(skills);
+					responses.add(response);
+				}
+				responseStructure<List<JobResponse>> responseStructure = new responseStructure<>();
+				responseStructure.setStatusCode(HttpStatus.FOUND.value());
+				responseStructure.setMessage("Job Found.");
+				responseStructure.setData(responses);
+				return new ResponseEntity<responseStructure<List<JobResponse>>>(responseStructure, HttpStatus.FOUND);
+			}else
+				throw new JobNotFoundBySkill("Failed to find Jobs!!");
+			
 		}else {
 			throw new SkillNotFoundByIdException("Failed to find Jobs!!");
 		}
