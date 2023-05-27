@@ -1,6 +1,7 @@
 package edu.project.jobportal.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -13,11 +14,13 @@ import edu.project.jobportal.dao.EmployerDao;
 import edu.project.jobportal.dao.JobDao;
 import edu.project.jobportal.dao.SkillDao;
 import edu.project.jobportal.dto.JobDto;
+import edu.project.jobportal.dto.JobResponse;
 import edu.project.jobportal.entity.Employer;
 import edu.project.jobportal.entity.Job;
 import edu.project.jobportal.entity.Skill;
 import edu.project.jobportal.exception.EmployerNotFoundByIdException;
 import edu.project.jobportal.exception.JobNotFoundByIdException;
+import edu.project.jobportal.exception.SkillNotFoundByIdException;
 import edu.project.jobportal.util.responseStructure;
 
 @Service
@@ -32,7 +35,7 @@ public class JobService {
 	@Autowired
 	private SkillDao skillDao;
 
-	public ResponseEntity<responseStructure<Job>> addJob(JobDto jobDto, long employerId, String[] skills) {
+	public ResponseEntity<responseStructure<JobResponse>> addJob(JobDto jobDto, long employerId, String[] skills) {
 
 		Employer employer = employerDao.getEmployer(employerId);
 		if (employer != null) {
@@ -45,52 +48,111 @@ public class JobService {
 			 * checking if the skill is already present in the database, if present add same
 			 * skill to the job, or else create the new skill
 			 */
-			List<Skill> exSkills = job.getSkills();
+			List<Skill> jobSkills = new ArrayList<>();
 			for (String skill : skills) {
 				Skill existingSkill = skillDao.getSkillByName(skill);
 			
 				if (existingSkill != null) {
-					if (!exSkills.contains(existingSkill)) {
-						exSkills.add(existingSkill);
+					if (!jobSkills.contains(existingSkill)) {
+						jobSkills.add(existingSkill);
 					}
 				} else {
 					Skill newSkill = new Skill();
 					newSkill.setSkillName(skill);
 					skillDao.saveSkill(newSkill);
-					exSkills.add(newSkill);
+					jobSkills.add(newSkill);
 				}
 			}
 			/*
 			 * setting the exSkills list to the job*/
-			job.setSkills(exSkills);
+			job.setSkills(jobSkills);
 
 			employer.getJobs().add(job);
 			employerDao.addEmployer(employer);
+			
+			JobResponse response = this.modelMapper.map(job, JobResponse.class);
+			List<String> responseSkills = new ArrayList<>();
+			for(Skill skill : job.getSkills()) {
+				responseSkills.add(skill.getSkillName());
+			}
+			response.setSkills(responseSkills);
 
 			jobDto.setJobId(job.getJobId());
-			responseStructure<Job> responseStructure = new responseStructure<>();
+			responseStructure<JobResponse> responseStructure = new responseStructure<>();
 			responseStructure.setStatusCode(HttpStatus.CREATED.value());
 			responseStructure.setMessage("Job added successfully!!");
-			responseStructure.setData(job);
+			responseStructure.setData(response);
 
-			return new ResponseEntity<responseStructure<Job>>(responseStructure, HttpStatus.CREATED);
+			return new ResponseEntity<responseStructure<JobResponse>>(responseStructure, HttpStatus.CREATED);
 		} else {
 			throw new EmployerNotFoundByIdException("Failed to add Job!!");
 		}
 
 	}
 
-	public ResponseEntity<responseStructure<Job>> getJobById(long jobId) {
+	
+	
+	public ResponseEntity<responseStructure<JobResponse>> getJobById(long jobId) {
 		Job job = jobDao.getJob(jobId);
 		if(job!=null) {
-			responseStructure<Job> responseStructure = new responseStructure<>();
+			JobResponse response = this.modelMapper.map(job, JobResponse.class);
+			List<String> responseSkills = new ArrayList<>();
+			for(Skill skill : job.getSkills()) {
+				responseSkills.add(skill.getSkillName());
+			}
+			response.setSkills(responseSkills);
+			
+			responseStructure<JobResponse> responseStructure = new responseStructure<>();
 			responseStructure.setStatusCode(HttpStatus.FOUND.value());
 			responseStructure.setMessage("Job Found.");
-			responseStructure.setData(job);
-			return new ResponseEntity<responseStructure<Job>>(responseStructure, HttpStatus.FOUND);
+			responseStructure.setData(response);
+			return new ResponseEntity<responseStructure<JobResponse>>(responseStructure, HttpStatus.FOUND);
 		}else
 		throw new JobNotFoundByIdException("Failed to find Job!!");
 	}
+
+	
+	
+	public ResponseEntity<responseStructure<List<Job>>> getJobsBySkill(long skillId) {
+		Skill skill = skillDao.getSkillById(skillId);
+		if(skill!=null) {
+			skill.getJobs();
+			return null;
+		}else {
+			throw new SkillNotFoundByIdException("Failed to find Jobs!!");
+		}
+	}
+	
+	
+	
+	public ResponseEntity<responseStructure<JobResponse>> updateJobById(JobDto jobDto, int jobId){
+		Job exJob = jobDao.getJob(jobId);
+		if(exJob!=null) {
+			Job job = this.modelMapper.map(jobDto, Job.class);
+			job.setJobId(jobId);
+			job.setJobCreateDatetime(exJob.getJobCreateDatetime());
+			job.setEmployer(exJob.getEmployer());
+			job.setJobApplications(exJob.getJobApplications());
+			job.setSkills(exJob.getSkills());
+			job = jobDao.addJob(job);
+			JobResponse response = this.modelMapper.map(job, JobResponse.class);
+			List<String> skills = new ArrayList<>();
+			for(Skill skill : job.getSkills()) {
+				skills.add(skill.getSkillName());
+			}
+			response.setSkills(skills);
+			
+			responseStructure<JobResponse> responseStructure = new responseStructure<>();
+			responseStructure.setStatusCode(HttpStatus.OK.value());
+			responseStructure.setMessage("Job updated successfully!!");
+			responseStructure.setData(response);
+			return new ResponseEntity<responseStructure<JobResponse>> (responseStructure, HttpStatus.OK);
+		}else {
+			throw new JobNotFoundByIdException("Failed to update Job!!");
+		}
+	}
+	
+	
 
 	/*
 	 * 1) write a method to fetch the Job buy Id, ----- fetch the job from database
