@@ -1,5 +1,7 @@
 package edu.project.jobportal.dao;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,5 +20,9 @@ public class ProjectDao {
 
 	public void deleteProject(Project project) {
 		projectRepo.delete(project);
+	}
+
+	public Optional<Project> getProjectById(long projectId) {
+		return projectRepo.findById(projectId);
 	}
 }

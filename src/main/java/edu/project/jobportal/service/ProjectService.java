@@ -1,6 +1,7 @@
 package edu.project.jobportal.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import edu.project.jobportal.entity.Applicant;
 import edu.project.jobportal.entity.Project;
 import edu.project.jobportal.entity.Resume;
 import edu.project.jobportal.exception.ApplicantNotfoundByIdException;
+import edu.project.jobportal.exception.ProjectNotFoundByIdException;
 import edu.project.jobportal.exception.ResumeNotFoundByIdException;
 import edu.project.jobportal.util.responseStructure;
 
@@ -53,6 +55,19 @@ public class ProjectService {
 			throw new ApplicantNotfoundByIdException("Failed to add Projects!!");
 		}
 	}
+
+	public ResponseEntity<responseStructure<Project>> getproject(long projectId) {
+		Optional<Project> optional = projectDao.getProjectById(projectId);
+		if(optional.isPresent()) {
+			responseStructure<Project> structure = new responseStructure<>();
+			structure.setStatusCode(HttpStatus.FOUND.value());
+			structure.setMessage("Project found.");
+			structure.setData(optional.get());
+			return new ResponseEntity<responseStructure<Project>>(structure, HttpStatus.FOUND);
+		}else
+			throw new ProjectNotFoundByIdException("Failed to find project!!");
+	}
+	
 	
 	
 	/*

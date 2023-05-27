@@ -63,4 +63,13 @@ public class JobPortalExceptionHandler {
 		responseStructure.setData("Failed to find the Skill with requested Skill!!");
 		return new ResponseEntity<responseStructure<String>> (responseStructure, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler
+	public ResponseEntity<responseStructure<String>> ProjectNotFoundById(ProjectNotFoundByIdException ex){
+		responseStructure<String> responseStructure = new responseStructure<>();
+		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		responseStructure.setMessage(ex.getMessage());
+		responseStructure.setData("Failed to find the Project with requested Skill!!");
+		return new ResponseEntity<responseStructure<String>> (responseStructure, HttpStatus.NOT_FOUND);
+	}
 }
