@@ -67,6 +67,21 @@ public class ProjectService {
 		}else
 			throw new ProjectNotFoundByIdException("Failed to find project!!");
 	}
+
+	public ResponseEntity<responseStructure<Project>> updateProject(long projectId, ProjectDto projectDto) {
+		Optional<Project> optional = projectDao.getProjectById(projectId);
+		if(optional.isPresent()) {
+			Project project = this.modelMapper.map(projectDto, Project.class);
+			project.setProjectId(projectId);
+			project = projectDao.saveProject(project);
+			responseStructure<Project> structure = new responseStructure<>();
+			structure.setStatusCode(HttpStatus.OK.value());
+			structure.setMessage("Project found.");
+			structure.setData(optional.get());
+			return new ResponseEntity<responseStructure<Project>>(structure, HttpStatus.OK);
+		}else
+			throw new ProjectNotFoundByIdException("Failed to update Project!!");
+	}
 	
 	
 	
