@@ -74,6 +74,15 @@ public class JobPortalExceptionHandler {
 	}
 	
 	@ExceptionHandler
+	public ResponseEntity<responseStructure<String>> AlreasyAppliedToJob(AlreasyAppliedToJobException ex){
+		responseStructure<String> responseStructure = new responseStructure<>();
+		responseStructure.setStatusCode(HttpStatus.BAD_REQUEST.value());
+		responseStructure.setMessage(ex.getMessage());
+		responseStructure.setData("Cannot apply to the job twice!!");
+		return new ResponseEntity<responseStructure<String>> (responseStructure, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler
 	public ResponseEntity<responseStructure<String>> ProjectNotFoundById(ProjectNotFoundByIdException ex){
 		responseStructure<String> responseStructure = new responseStructure<>();
 		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());

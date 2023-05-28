@@ -88,9 +88,5 @@ public class ProjectService {
 		return null;
 	}
 	
-	
-	
-	/*
-	 * create methods for updating, deleting and fetching the project object.
-	 * */
+
 }

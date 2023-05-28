@@ -27,7 +27,7 @@ public class SkillService {
 	@Autowired
 	private ResumeDao resumeDao;
 
-	public ResponseEntity<responseStructure<Resume>> saveSkill(long applicantId, String[] skills) {
+	public ResponseEntity<responseStructure<Resume>> saveSkillToApplicant(long applicantId, String[] skills) {
 		Applicant applicant = applicantDao.getApplicant(applicantId);
 		if (applicant != null) {
 			Resume resume = applicant.getResume();

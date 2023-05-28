@@ -19,19 +19,13 @@ public class SkillController {
 	private SkillService skillService;
 	
 	@PostMapping
-	public ResponseEntity<responseStructure<Resume>> saveSkills
+	public ResponseEntity<responseStructure<Resume>> saveSkillsToApplicant
 	(@RequestParam long applicantId, @RequestParam String[] skills){
-		return skillService.saveSkill(applicantId, skills);
+		return skillService.saveSkillToApplicant(applicantId, skills);
 	}
+	
 	
 	
 }
 
-
-/**
- * create API's for -
- *  getApplicantById
- *  getEmployerById
- *  getResumeById
- *  getJobById*/
  
