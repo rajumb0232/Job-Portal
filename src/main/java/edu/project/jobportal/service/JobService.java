@@ -184,8 +184,13 @@ public class JobService {
 				application.setJob(null);
 				applicationDao.createJobApplication(application);
 			}
-			jobDao.deleteJob(job);
 			JobResponse response = this.modelMapper.map(job, JobResponse.class);
+			List<String> responseSkills = new ArrayList<>();
+			for(Skill skill : job.getSkills()) {
+				responseSkills.add(skill.getSkillName());
+			}
+			response.setSkills(responseSkills);
+			jobDao.deleteJob(job);
 			responseStructure<JobResponse> responseStructure = new responseStructure<>();
 			responseStructure.setStatusCode(HttpStatus.OK.value());
 			responseStructure.setMessage("Job deleted successfully!!");
