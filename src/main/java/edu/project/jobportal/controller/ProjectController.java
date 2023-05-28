@@ -2,6 +2,7 @@ package edu.project.jobportal.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,6 +40,12 @@ public class ProjectController {
 	public ResponseEntity<responseStructure<Project>> updateProject(
 			@RequestParam long projectId, @RequestBody ProjectDto projectDto){
 		return projectService.updateProject(projectId, projectDto);
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<responseStructure<Project>> deleteProject(
+			@RequestParam long projectId){
+		return projectService.deleteProject(projectId);
 	}
 	
 }

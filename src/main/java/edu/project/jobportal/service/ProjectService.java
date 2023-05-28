@@ -76,11 +76,16 @@ public class ProjectService {
 			project = projectDao.saveProject(project);
 			responseStructure<Project> structure = new responseStructure<>();
 			structure.setStatusCode(HttpStatus.OK.value());
-			structure.setMessage("Project found.");
+			structure.setMessage("Project updated successfully.");
 			structure.setData(optional.get());
 			return new ResponseEntity<responseStructure<Project>>(structure, HttpStatus.OK);
 		}else
 			throw new ProjectNotFoundByIdException("Failed to update Project!!");
+	}
+
+	public ResponseEntity<responseStructure<Project>> deleteProject(long projectId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
