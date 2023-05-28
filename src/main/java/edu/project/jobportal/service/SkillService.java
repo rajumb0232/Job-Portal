@@ -56,6 +56,7 @@ public class SkillService {
 				 * setting the exSkills list to the resume*/
 				resume.setSkills(exSkills);
 				
+				
 				resume = resumeDao.saveResume(resume);
 				responseStructure<Resume> responseStructure = new responseStructure<>();
 				responseStructure.setStatusCode(HttpStatus.CREATED.value());

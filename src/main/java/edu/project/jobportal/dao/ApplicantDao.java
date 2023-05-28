@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import edu.project.jobportal.entity.Applicant;
+import edu.project.jobportal.entity.Skill;
 import edu.project.jobportal.repository.ApplicantRepo;
 
 @Repository
@@ -30,5 +31,9 @@ public class ApplicantDao {
 
 	public void deleteApplicant(Applicant applicant) {
 		applicantRepo.delete(applicant);
+	}
+
+	public Optional<Skill> getSkillBySkillName(String skill) {
+		return applicantRepo.getSkillBySkillName(skill);
 	}
 }

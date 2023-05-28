@@ -1,5 +1,9 @@
 package edu.project.jobportal.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,11 +15,14 @@ import edu.project.jobportal.dao.JobApplicationDao;
 import edu.project.jobportal.dao.ProjectDao;
 import edu.project.jobportal.dao.ResumeDao;
 import edu.project.jobportal.dto.ApplicantDto;
+import edu.project.jobportal.dto.ApplicantResponse;
 import edu.project.jobportal.entity.Applicant;
 import edu.project.jobportal.entity.JobApplication;
 import edu.project.jobportal.entity.Project;
 import edu.project.jobportal.entity.Resume;
+import edu.project.jobportal.entity.Skill;
 import edu.project.jobportal.exception.ApplicantNotfoundByIdException;
+import edu.project.jobportal.exception.SkillNotFoundByNameException;
 import edu.project.jobportal.util.responseStructure;
 
 @Service
@@ -111,5 +118,23 @@ public class ApplicatService {
 		}
 		throw new ApplicantNotfoundByIdException("Failed to delete Applicant!!");
 
+	}
+
+	public ResponseEntity<responseStructure<List<ApplicantResponse>>> getApplicantBySkill(String skill) {
+		Optional<Skill> optional = applicantDao.getSkillBySkillName(skill);
+		if(optional.isPresent()) {
+			Skill exSkill = optional.get();
+			List<ApplicantResponse> responses = new ArrayList<>();
+			for(Resume resume : exSkill.getResumes()) {
+				ApplicantResponse response = this.modelMapper.map(resume.getApplicant(), ApplicantResponse.class);
+				responses.add(response);
+			}
+			responseStructure<List<ApplicantResponse>> responseStructure = new responseStructure<>();
+			responseStructure.setStatusCode(HttpStatus.FOUND.value());
+			responseStructure.setMessage("Applicants Found by Skill.");
+			responseStructure.setData(responses);
+			return new ResponseEntity<responseStructure<List<ApplicantResponse>>>(responseStructure, HttpStatus.FOUND);
+		}else
+			throw new SkillNotFoundByNameException("Failed to find the Applicats!!");
 	}
 }

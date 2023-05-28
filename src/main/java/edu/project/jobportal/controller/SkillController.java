@@ -23,6 +23,8 @@ public class SkillController {
 	(@RequestParam long applicantId, @RequestParam String[] skills){
 		return skillService.saveSkill(applicantId, skills);
 	}
+	
+	
 }
 
 

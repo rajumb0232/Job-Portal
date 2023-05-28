@@ -1,5 +1,7 @@
 package edu.project.jobportal.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.project.jobportal.dto.ApplicantDto;
+import edu.project.jobportal.dto.ApplicantResponse;
 import edu.project.jobportal.entity.Applicant;
 import edu.project.jobportal.service.ApplicatService;
 import edu.project.jobportal.util.responseStructure;
@@ -41,6 +44,12 @@ public class ApplicantController {
 	@DeleteMapping
 	public ResponseEntity<responseStructure<ApplicantDto>> deleteApplicantById(@RequestParam int applicantId){
 		return applicatService.deleteApplicant(applicantId);
+	}
+	
+	@GetMapping("/skill")
+	public ResponseEntity<responseStructure<List<ApplicantResponse>>> getApplicantBySkill(
+			@RequestParam String skill){
+		return applicatService.getApplicantBySkill(skill);
 	}
 
 }

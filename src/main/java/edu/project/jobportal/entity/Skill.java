@@ -26,4 +26,8 @@ public class Skill {
 	@ManyToMany(mappedBy = "skills")
 	@JsonIgnore
 	private List<Job> jobs;
+	
+	@ManyToMany(mappedBy = "skills")
+	@JsonIgnore
+	private List<Resume> resumes;
 }

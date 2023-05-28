@@ -56,11 +56,20 @@ public class JobPortalExceptionHandler {
 	}
 	
 	@ExceptionHandler
+	public ResponseEntity<responseStructure<String>> SkillNotFoundByName(SkillNotFoundByNameException ex){
+		responseStructure<String> responseStructure = new responseStructure<>();
+		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		responseStructure.setMessage(ex.getMessage());
+		responseStructure.setData("Skill not present with the requested Name!!");
+		return new ResponseEntity<responseStructure<String>> (responseStructure, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler
 	public ResponseEntity<responseStructure<String>> JobNotFoundBySkill(JobNotFoundBySkill ex){
 		responseStructure<String> responseStructure = new responseStructure<>();
 		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
 		responseStructure.setMessage(ex.getMessage());
-		responseStructure.setData("Failed to find the Skill with requested Skill!!");
+		responseStructure.setData("Failed to find the Job with requested Skill!!");
 		return new ResponseEntity<responseStructure<String>> (responseStructure, HttpStatus.NOT_FOUND);
 	}
 	
