@@ -44,8 +44,8 @@ public class ProjectController {
 	
 	@DeleteMapping
 	public ResponseEntity<responseStructure<Project>> deleteProject(
-			@RequestParam long projectId){
-		return projectService.deleteProject(projectId);
+			@RequestParam long projectId, @RequestParam long applicantId){
+		return projectService.deleteProject(projectId, applicantId);
 	}
 	
 }

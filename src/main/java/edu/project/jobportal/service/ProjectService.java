@@ -83,9 +83,27 @@ public class ProjectService {
 			throw new ProjectNotFoundByIdException("Failed to update Project!!");
 	}
 
-	public ResponseEntity<responseStructure<Project>> deleteProject(long projectId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<responseStructure<Project>> deleteProject(long projectId, long applicantId) {
+		Optional<Project> optional = projectDao.getProjectById(projectId);
+		if(optional.isPresent()) {
+			Applicant applicant = applicantDao.getApplicant(applicantId);
+			if(applicant!=null) {
+				Resume resume = applicant.getResume();
+				if(resume!=null) {
+					resume.getProjects().remove(optional.get());
+					resumeDao.saveResume(resume);
+				}
+				projectDao.deleteProject(optional.get());
+				responseStructure<Project> structure = new responseStructure<>();
+				structure.setStatusCode(HttpStatus.OK.value());
+				structure.setMessage("Project deleted successfully.");
+				structure.setData(optional.get());
+				return new ResponseEntity<responseStructure<Project>>(structure, HttpStatus.OK);
+			}else
+				throw new ApplicantNotfoundByIdException("Failed to delete Project!!");
+		}else {
+			throw new ProjectNotFoundByIdException("Failec to delete Project!!");
+		}
 	}
 	
 
