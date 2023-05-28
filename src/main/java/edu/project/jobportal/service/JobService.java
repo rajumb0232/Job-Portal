@@ -11,12 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import edu.project.jobportal.dao.EmployerDao;
+import edu.project.jobportal.dao.JobApplicationDao;
 import edu.project.jobportal.dao.JobDao;
 import edu.project.jobportal.dao.SkillDao;
 import edu.project.jobportal.dto.JobDto;
 import edu.project.jobportal.dto.JobResponse;
 import edu.project.jobportal.entity.Employer;
 import edu.project.jobportal.entity.Job;
+import edu.project.jobportal.entity.JobApplication;
 import edu.project.jobportal.entity.Skill;
 import edu.project.jobportal.exception.EmployerNotFoundByIdException;
 import edu.project.jobportal.exception.JobNotFoundByIdException;
@@ -35,6 +37,8 @@ public class JobService {
 	private ModelMapper modelMapper;
 	@Autowired
 	private SkillDao skillDao;
+	@Autowired
+	private JobApplicationDao applicationDao;
 
 	public ResponseEntity<responseStructure<JobResponse>> addJob(JobDto jobDto, long employerId, String[] skills) {
 
@@ -174,8 +178,21 @@ public class JobService {
 
 
 	public ResponseEntity<responseStructure<JobResponse>> deleteJobById(long jobId) {
-		// TODO Auto-generated method stub
-		return null;
+		Job job = jobDao.getJob(jobId);
+		if(job!=null) {
+			for(JobApplication application : job.getJobApplications()) {
+				application.setJob(null);
+				applicationDao.createJobApplication(application);
+			}
+			jobDao.deleteJob(job);
+			JobResponse response = this.modelMapper.map(job, JobResponse.class);
+			responseStructure<JobResponse> responseStructure = new responseStructure<>();
+			responseStructure.setStatusCode(HttpStatus.OK.value());
+			responseStructure.setMessage("Job deleted successfully!!");
+			responseStructure.setData(response);
+			return new ResponseEntity<responseStructure<JobResponse>> (responseStructure, HttpStatus.OK);
+		}else
+			throw new JobNotFoundByIdException("Failed to delete Job!!");
 	}
 
 }
